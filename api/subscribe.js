@@ -37,7 +37,7 @@ export default async function handler(req, res) {
                     includeListIds: [7],
 
                     // URL pra onde o usuário vai depois de confirmar
-                    redirectionUrl: 'https://sportbyfort.com/thankyou',
+                    redirectionUrl: 'https://sportbyfort.com/thank-you',
 
                     // ID do template de e-mail do Brevo
                     templateId: 1
