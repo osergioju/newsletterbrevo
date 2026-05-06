@@ -40,7 +40,7 @@ export default async function handler(req, res) {
                     redirectionUrl: 'https://https://sportbyfort.com/thankyou',
 
                     // ID do template de e-mail do Brevo
-                    templateId: 7
+                    templateId: 1
                 })
             }
         );
