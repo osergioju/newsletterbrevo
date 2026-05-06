@@ -5,7 +5,7 @@ export default async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-    // 🧠 Preflight request (IMPORTANTE)
+    // 🧠 Preflight request
     if (req.method === 'OPTIONS') {
         return res.status(200).end();
     }
@@ -21,28 +21,47 @@ export default async function handler(req, res) {
     }
 
     try {
-        const response = await fetch('https://api.brevo.com/v3/contacts', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'api-key': process.env.BREVO_API_KEY
-            },
-            body: JSON.stringify({
-                email,
-                listIds: [7],
-                updateEnabled: true
-            })
-        });
+
+        const response = await fetch(
+            'https://api.brevo.com/v3/contacts/doubleOptinConfirmation',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'api-key': process.env.BREVO_API_KEY
+                },
+                body: JSON.stringify({
+                    email,
+
+                    // ID da lista
+                    includeListIds: [7],
+
+                    // URL pra onde o usuário vai depois de confirmar
+                    redirectionUrl: 'https://https://sportbyfort.com/thankyou',
+
+                    // ID do template de e-mail do Brevo
+                    templateId: 7
+                })
+            }
+        );
 
         const data = await response.json();
 
         if (!response.ok) {
-            return res.status(400).json({ message: data.message });
+            return res.status(400).json({
+                message: data.message || 'Brevo error'
+            });
         }
 
-        return res.status(200).json({ message: 'ok' });
+        return res.status(200).json({
+            message: 'confirmation email sent'
+        });
 
     } catch (err) {
-        return res.status(500).json({ message: 'server error' });
+
+        return res.status(500).json({
+            message: 'server error'
+        });
+
     }
 }
